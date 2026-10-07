@@ -1,0 +1,36 @@
+[package]
+name = "quicless"
+version = "0.1.0"
+edition = "2024"
+
+license = "Apache-2.0"
+description = "Suites for QUIC transmission as an alternative to SCTP."
+repository = "https://github.com/jellytera/quicless.rs"
+homepage = "https://github.com/jellytera/quicless.rs"
+documentation = "https://github.com/jellytera/quicless.rs"
+readme = "README.md"
+keywords = ["quic"]
+categories = ["network-programming"]
+
+[dependencies]
+bytes = "1.12.1"
+s2n-codec = "0.88.0"
+s2n-quic-core = { version = "0.88.0", default-features = false, features = ["alloc", "atomic-waker", "bytes", "crossbeam-utils", "once_cell", "std"] }
+s2n-quic = { version = "=1.88.0", optional = true, default-features = false, features = ["provider-address-token-default"] }
+
+[dev-dependencies]
+tokio = { version = "1", features = ["full"] }
+
+[features]
+default = ["provider"]
+provider = ["dep:s2n-quic", "s2n-quic/provider-tls-rustls"]
+
+[[example]]
+name = "echo_server"
+path = "examples/echo_server.rs"
+required-features = ["provider"]
+
+[[example]]
+name = "echo_client"
+path = "examples/echo_client.rs"
+required-features = ["provider"]
